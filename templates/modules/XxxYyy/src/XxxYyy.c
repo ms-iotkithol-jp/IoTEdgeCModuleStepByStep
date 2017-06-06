@@ -122,6 +122,7 @@ static MODULE_HANDLE XxxYyy_Create(BROKER_HANDLE broker, const void* configurati
             }
             else
             {
+                result->stopThread = 0;
                 result->broker = broker;
                 result->sendCycle = moduleConfig->sendCycle;
                 // TODO: Add specific logic 
