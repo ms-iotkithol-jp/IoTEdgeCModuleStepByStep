@@ -1,14 +1,16 @@
 {
   "modules": [
     {
-      "name": "XxxYyy1",
+      "name": "XxxYyy",
       "loader": {
         "name" : "native",
         "entrypoint" : {
           "module.path": "build/modules/XxxYyy1/libxxxyyy1.so"
         }
       },
-      "args": null
+      "args": {
+          "send-cycle-sec": 10000
+      }
     },
     {
       "name": "XxxYyy2",

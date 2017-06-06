@@ -13,6 +13,8 @@ extern "C"
 
 MODULE_EXPORT const MODULE_API* MODULE_STATIC_GETAPI(XXX_YYY_MODULE)(MODULE_API_VERSION gateway_api_version);
 
+#define SEND_CYCLE "send-cycle-sec"
+
 #ifdef __cplusplus
 }
 #endif
