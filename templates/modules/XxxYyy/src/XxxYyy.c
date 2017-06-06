@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+#include <stdio.h>
 #include <stdlib.h>
 #include "module.h"
 #include "azure_c_shared_utility/xlogging.h"
@@ -9,6 +10,8 @@
 #include "azure_c_shared_utility/threadapi.h"
 #include "azure_c_shared_utility/xlogging.h"
 #include "azure_c_shared_utility/lock.h"
+#include "azure_c_shared_utility/constmap.h"
+#include "azure_c_shared_utility/constbuffer.h"
 
 typedef struct XXX_YYY_HANDLE_DATA_TAG
 {
@@ -17,7 +20,7 @@ typedef struct XXX_YYY_HANDLE_DATA_TAG
     LOCK_HANDLE lockHandle;
     BROKER_HANDLE broker;
     int sendCycle;
-}XXX_YYY_HANDLE_DATA;
+} XXX_YYY_HANDLE_DATA;
 
 // Data structure for JSON configuration
 typedef struct XXX_YYY_CONFIG_TAG
@@ -202,8 +205,35 @@ static void XxxYyy_Destroy(MODULE_HANDLE module)
 
 static void XxxYyy_Receive(MODULE_HANDLE moduleHandle, MESSAGE_HANDLE messageHandle)
 {
-    (void)moduleHandle;
-    (void)messageHandle;
+    XXX_YYY_HANDLE_DATA* xxxYyyHandle = (XXX_YYY_HANDLE_DATA*)moduleHandle;
+    CONSTMAP_HANDLE props = Message_GetProperties(message);
+    if (props != NULL)
+    {
+        const char* source = ConstMap_GetValue(props, GW_SOURCE_PROPERTY);
+        if (source != NULL)
+        {
+            LogInfo("Recieved mseesage from %s", source);
+        }
+        const char* xxxYyy = ConstMap_GetValue(props, "xxx-yyy");
+        if (xxxYyy != NULL)
+        {
+            LogInfo("xxx-yyy:%s", xxxYyy);
+        }
+    }
+    const CONSTBUFFER* buffer = Message_GetContent(message);
+    if (buffer != NULL)
+    {
+        size_t size = buffer->size;
+        const unsigned char* content = buffer->buffer;
+        char* messageContent = new byte[size*2+1];
+        for(size_t i=0;i<size;i++)
+        {
+            sprintf(messageContent[i*2],"%02x", content[i]);
+        }
+        messageContent[size*2] = '\0';
+        LogInfo("Received Content:size=%d,%s"size,messageContent);
+        free(messageContent);
+    }
 
     // TODO: Add specific action logic when this module receives message
 }
