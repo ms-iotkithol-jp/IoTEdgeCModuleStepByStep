@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#ifndef HELLO_WORLD_H
-#define HELLO_WORLD_H
+#ifndef XXX_YYY_H
+#define XXX_YYY_H
 
 #include "module.h"
 

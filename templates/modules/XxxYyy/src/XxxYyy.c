@@ -13,11 +13,14 @@
 #include "azure_c_shared_utility/constmap.h"
 #include "azure_c_shared_utility/constbuffer.h"
 
+#include <parson.h>
+
 typedef struct XXX_YYY_HANDLE_DATA_TAG
 {
     // TODO: Add specific members 
     THREAD_HANDLE threadHandle;
     LOCK_HANDLE lockHandle;
+    int stopThread;
     BROKER_HANDLE broker;
     int sendCycle;
 } XXX_YYY_HANDLE_DATA;
@@ -27,6 +30,9 @@ typedef struct XXX_YYY_CONFIG_TAG
 {
     int sendCycle;
 } XXX_YYY_CONFIG;
+
+#define XXX_YYY_MESSAGE "Message From XxxYyy module"
+#define GW_SOURCE_PROPERTY "source"
 
 int xxxYyyThread(void *param)
 {
@@ -46,8 +52,8 @@ int xxxYyyThread(void *param)
         }
         else
         {
-            msgConfig.size = (size_t)strlen(HELLOWORLD_MESSAGE);
-            msgConfig.source = (unsigned char*)HELLOWORLD_MESSAGE;
+            msgConfig.size = (size_t)strlen(XXX_YYY_MESSAGE);
+            msgConfig.source = (unsigned char*)XXX_YYY_MESSAGE;
     
             msgConfig.sourceProperties = propertiesMap;
 
@@ -137,8 +143,9 @@ static void* XxxYyy_ParseConfigurationFromJson(const char* configuration)
         }
         else
         {
+            JSON_Object* obj = json_value_get_object(json);
             result = (XXX_YYY_CONFIG*)malloc(sizeof(XXX_YYY_CONFIG));
-            result->sendCycle = (int)json_object_get_number(json, SEND_CYCLE);
+            result->sendCycle = (int)json_object_get_number(obj, SEND_CYCLE);
         }
     }
     // TODO: Add specific parse logic 
@@ -206,7 +213,11 @@ static void XxxYyy_Destroy(MODULE_HANDLE module)
 static void XxxYyy_Receive(MODULE_HANDLE moduleHandle, MESSAGE_HANDLE messageHandle)
 {
     XXX_YYY_HANDLE_DATA* xxxYyyHandle = (XXX_YYY_HANDLE_DATA*)moduleHandle;
-    CONSTMAP_HANDLE props = Message_GetProperties(message);
+    if (xxxYyyHandle!=NULL)
+    {
+        LogInfo("Test SendCycle=%d", xxxYyyHandle->sendCycle);
+    }
+    CONSTMAP_HANDLE props = Message_GetProperties(messageHandle);
     if (props != NULL)
     {
         const char* source = ConstMap_GetValue(props, GW_SOURCE_PROPERTY);
@@ -220,18 +231,18 @@ static void XxxYyy_Receive(MODULE_HANDLE moduleHandle, MESSAGE_HANDLE messageHan
             LogInfo("xxx-yyy:%s", xxxYyy);
         }
     }
-    const CONSTBUFFER* buffer = Message_GetContent(message);
+    const CONSTBUFFER* buffer = Message_GetContent(messageHandle);
     if (buffer != NULL)
     {
         size_t size = buffer->size;
         const unsigned char* content = buffer->buffer;
-        char* messageContent = new byte[size*2+1];
+        char* messageContent = (char*)malloc(size*2+1);
         for(size_t i=0;i<size;i++)
         {
-            sprintf(messageContent[i*2],"%02x", content[i]);
+            sprintf(&messageContent[i*2],"%02x", content[i]);
         }
         messageContent[size*2] = '\0';
-        LogInfo("Received Content:size=%d,%s"size,messageContent);
+        LogInfo("Received Content:size=%d,%s", size, messageContent);
         free(messageContent);
     }
 

@@ -3,6 +3,11 @@
 
 cmake_minimum_required(VERSION 2.8.12)
 
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GWGIOUNIX REQUIRED gio-unix-2.0)
+include_directories(${GWGIOUNIX_INCLUDE_DIRS})
+set(LIBS ${GWGIOUNIX_LIBRARIES})
+
 set(sss_nnn_sources
     ./src/main.c
 )
@@ -19,14 +24,16 @@ include_directories(../../modules/common)
 
 add_executable(sss_nnn_sample ${sss_nnn_sources})
 
-# Add all necessary modules ! 'XxxYyy1 XxxYyy2 XxxYyy3' is just a sample 
-add_dependencies(sss_nnn_sample sss_nnn XxxYyy1 XxxYyy2 XxxYyy3 logger)
+# Add all necessary modules ! 'XxxYyy XxxYyy2 XxxYyy3' is just a sample 
+add_dependencies(sss_nnn_sample sss_nnn XxxYyy XxxYyy2 XxxYyy3 logger)
 
 # if you need other libraries, add them
-target_link_libraries(sss_nnn_sample gateway nanomsg logger)
+target_link_libraries(sss_nnn_sample gateway nanomsg ${LIBS})
 
 linkSharedUtil(sss_nnn_sample)
 install_broker(sss_nnn_sample ${CMAKE_CURRENT_BINARY_DIR}/$(Configuration) )
 copy_gateway_dll(sss_nnn_sample ${CMAKE_CURRENT_BINARY_DIR}/$(Configuration) )
 
 add_sample_to_solution(sss_nnn_sample)
+
+add_subdirectory(XxxYyy)
