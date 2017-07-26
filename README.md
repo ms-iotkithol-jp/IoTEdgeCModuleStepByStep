@@ -42,7 +42,7 @@ iot-edge/modulesの下に、モジュールの名前と同じ文字列でディ�
 
 というサブディレクトリを作成し、ディレクトリ直下にCMakeLists.txtというファイルを作成し、[templates/modules/*XxxYyy*/CMakeLists.txt](templates/modules/XxxYyy/CMakeLists.txt)の内容をコピペします。  
 コピペしたら、XxxYyyを各モジュールの名前に全部置換します。  
-inc、srcに、それぞれ、[templates/modules/*XxxYyy*/inc/*XxxYyy*.h](templates/modules/XxxYyy/inc/XxxYyy.h)、[templates/modules/*XxxYyy*/inc/*XxxYyy*.c](templates/modules/XxxYyy/inc/XxxYyy.c)をコピーし、ファイル名の変更と、ファイル内の*XxxYyy*のモジュール名への変更を行います。  
+inc、srcに、それぞれ、[templates/modules/*XxxYyy*/inc/*XxxYyy*.h](templates/modules/XxxYyy/inc/XxxYyy.h)、[templates/modules/*XxxYyy*/src/*XxxYyy*.c](templates/modules/XxxYyy/src/XxxYyy.c)をコピーし、ファイル名の変更と、ファイル内の*XxxYyy*のモジュール名への変更を行います。  
 iot-edge/modules/CMakeLists.txtの最後に、
 add_subdirectory(*XxxYyy*) 
 を追加します。 
