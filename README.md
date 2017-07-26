@@ -27,9 +27,9 @@ Step 1で定義したモジュール群が、汎用性の高いもの（他の�
 ## 4. モジュールを実装する場所を作る 
 使用するモジュール群を束ねてシナリオを実行するアプリを実装するディレクトリを先ず作ります。 
 iot-edge/samples の下に、*SssNnn*という名前のディレクトリを作成しておきます。その下に、
-- inc 
-- src 
-という二つのディレクトリを作成します。 
+- src   
+
+というディレクトリを作成します。そのディレクトリの下にmain.cという名前のファイルを作成し、[templates/samples/*SssNnn*/src/main.c](templates/samples/SssNnn/src/main.c)の中身を丸ごとコピーします。  
 iot-edge/samples/CMakeLists.txtの最後に、 
 add_subdirectory(*SssNnn*) 
 を付け加えます。 
