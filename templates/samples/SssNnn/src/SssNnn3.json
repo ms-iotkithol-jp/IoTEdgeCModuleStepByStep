@@ -1,0 +1,56 @@
+{
+    "modules": [{
+            "name": "XxxYyy",
+            "loader": {
+                "name": "native",
+                "entrypoint": {
+                    "module.path": "build/modules/XxxYyy1/libxxxyyy1.so"
+                }
+            },
+            "args": {
+                "send-cycle-sec": 10000
+            }
+        },
+        {
+            "name": "XxxYyy2",
+            "loader": {
+                "name": "native",
+                "entrypoint": {
+                    "module.path": "build/XxxYyy2/libxxxyyy2.so"
+                }
+            },
+            "args": null
+        },
+        {
+            "name": "XxxYyy3",
+            "loader": {
+                "name": "native",
+                "entrypoint": {
+                    "module.path": "build/samples/SssNnn/XxxYyy3/libxxxyyy3.so"
+                }
+            },
+            "args": null
+        },
+        {
+            "name": "Logger",
+            "loader": {
+                "name": "native",
+                "entrypoint": {
+                    "module.path": "build/modules/logger/liblogger.so"
+                }
+            },
+            "args": {
+                "filename": "<</path/to/log-file.log>>"
+            }
+        }
+    ],
+    "links": [{
+            "source": "*",
+            "sink": "Logger"
+        },
+        {
+            "source": "XxxYyy1",
+            "sink": "XxxYyy2"
+        }
+    ]
+}
